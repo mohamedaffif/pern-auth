@@ -1,19 +1,11 @@
 import express from "express";
-import pool from "./config/db.js";
+import { connectDB } from "./lib/prisma.js";
 
 
 const app = express();
+connectDB();
 
 
-
-// Test database connection
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    console.error('Database connection error:', err);
-  } else {
-    console.log('Database connected! Server time:', res.rows[0].now);
-  }
-});
 
 app.get("/", (req, res) => {
     res.send("Hello World!");
