@@ -1,21 +1,90 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
 
 export const Route = createFileRoute('/register')({
-  component: RegisterPage,
+  component: Register,
 })
 
-function RegisterPage() {
+const schema = z.object({
+  name: z.string().min(2, 'Name too short'),
+  email: z.string().email('Invalid email'),
+  password: z.string().min(6, 'Min 6 characters'),
+})
+
+type FormData = z.infer<typeof schema>
+
+function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  })
+
+  const onSubmit = async (data: FormData) => {
+    console.log('Register data:', data)
+
+    // later: API call here
+  }
+
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Register</h1>
+    <div className="flex items-center justify-center h-screen bg-gray-50">
+      <Card className="w-95 p-6">
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off"   className="space-y-4">
 
-      <form style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <input placeholder="Name" />
-        <input placeholder="Email" />
-        <input type="password" placeholder="Password" />
+        <h1 className="text-2xl font-bold">Create Account</h1>
 
-        <button type="submit">Create Account</button>
-      </form>
+        {/* Name */}
+        <div className="space-y-1">
+          <Label>Name</Label>
+          <Input placeholder="John Doe" {...register('name')} />
+          {errors.name && (
+            <p className="text-red-500 text-sm">
+              {errors.name.message}
+            </p>
+          )}
+        </div>
+
+        {/* Email */}
+        <div className="space-y-1">
+          <Label>Email</Label>
+          <Input autoComplete="off" placeholder="email@example.com" {...register('email')} />
+          {errors.email && (
+            <p className="text-red-500 text-sm">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
+
+        {/* Password */}
+        <div className="space-y-1">
+          <Label>Password</Label>
+          <Input type="password" {...register('password')} />
+          {errors.password && (
+            <p className="text-red-500 text-sm">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        <Button
+          className="w-full"
+          type="submit"
+          onClick={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Creating...' : 'Create Account'}
+        </Button>
+          </form>
+      </Card>
     </div>
   )
 }
