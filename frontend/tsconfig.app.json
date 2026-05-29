@@ -16,7 +16,8 @@
     "jsx": "react-jsx",
     "paths": {
       "@/api/*": ["./api/*"],
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "~/*": ["./*"]
     },
 
     /* Linting */
@@ -25,5 +26,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src","api"]
 }
