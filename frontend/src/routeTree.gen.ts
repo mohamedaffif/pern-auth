@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestQueryRouteImport } from './routes/test-query'
+import { Route as TestApiRouteImport } from './routes/test-api'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
@@ -18,6 +19,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TestQueryRoute = TestQueryRouteImport.update({
   id: '/test-query',
   path: '/test-query',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestApiRoute = TestApiRouteImport.update({
+  id: '/test-api',
+  path: '/test-api',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/test-api': typeof TestApiRoute
   '/test-query': typeof TestQueryRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/test-api': typeof TestApiRoute
   '/test-query': typeof TestQueryRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,28 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/test-api': typeof TestApiRoute
   '/test-query': typeof TestQueryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/profile' | '/register' | '/test-query'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/test-api'
+    | '/test-query'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/profile' | '/register' | '/test-query'
-  id: '__root__' | '/' | '/login' | '/profile' | '/register' | '/test-query'
+  to: '/' | '/login' | '/profile' | '/register' | '/test-api' | '/test-query'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/test-api'
+    | '/test-query'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +98,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
+  TestApiRoute: typeof TestApiRoute
   TestQueryRoute: typeof TestQueryRoute
 }
 
@@ -86,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/test-query'
       fullPath: '/test-query'
       preLoaderRoute: typeof TestQueryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test-api': {
+      id: '/test-api'
+      path: '/test-api'
+      fullPath: '/test-api'
+      preLoaderRoute: typeof TestApiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -124,6 +154,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
+  TestApiRoute: TestApiRoute,
   TestQueryRoute: TestQueryRoute,
 }
 export const routeTree = rootRouteImport
